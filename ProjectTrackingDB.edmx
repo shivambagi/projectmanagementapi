@@ -1,0 +1,672 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeName" Type="varchar" MaxLength="500" />
+          <Property Name="Designation" Type="varchar" MaxLength="500" />
+          <Property Name="ManagerID" Type="int" />
+          <Property Name="ContactNo" Type="varchar" MaxLength="500" />
+          <Property Name="EmailID" Type="varchar" MaxLength="500" />
+          <Property Name="SkillSets" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ManagerComment">
+          <Key>
+            <PropertyRef Name="ManagerCommentID" />
+          </Key>
+          <Property Name="ManagerCommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comments" Type="varchar" MaxLength="500" />
+          <Property Name="ProjectTaskID" Type="int" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectName" Type="varchar" MaxLength="1000" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="ClientName" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ProjectTask">
+          <Key>
+            <PropertyRef Name="ProjectTaskID" />
+          </Key>
+          <Property Name="ProjectTaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="TaskStartDate" Type="date" />
+          <Property Name="TaskEndDate" Type="date" />
+          <Property Name="TaskCompletion" Type="int" />
+          <Property Name="UserStoryID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserStory">
+          <Key>
+            <PropertyRef Name="UserStoryID" />
+          </Key>
+          <Property Name="UserStoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Story" Type="varchar" MaxLength="500" />
+          <Property Name="ProjectID" Type="int" />
+        </EntityType>
+        <Association Name="FK__ManagerCo__Proje__31EC6D26">
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="0..1" />
+          <End Role="ManagerComment" Type="Self.ManagerComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTask">
+              <PropertyRef Name="ProjectTaskID" />
+            </Principal>
+            <Dependent Role="ManagerComment">
+              <PropertyRef Name="ProjectTaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjectTa__Assig__2E1BDC42">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="ProjectTask">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjectTa__UserS__2F10007B">
+          <End Role="UserStory" Type="Self.UserStory" Multiplicity="0..1" />
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserStory">
+              <PropertyRef Name="UserStoryID" />
+            </Principal>
+            <Dependent Role="ProjectTask">
+              <PropertyRef Name="UserStoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserStory__Proje__29572725">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="UserStory" Type="Self.UserStory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="UserStory">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DeleteEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteProjectTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectTaskID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetAllEmployees" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllProjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllProjectTasks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetEmployeeByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetEmployeeByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetProjectByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetProjectByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetProjectTaskByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectTaskID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetUserStories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="InsertEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeName" Type="varchar" Mode="In" />
+          <Parameter Name="Designation" Type="varchar" Mode="In" />
+          <Parameter Name="ManagerID" Type="int" Mode="In" />
+          <Parameter Name="ContactNo" Type="varchar" Mode="In" />
+          <Parameter Name="EmailID" Type="varchar" Mode="In" />
+          <Parameter Name="SkillSets" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectName" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+          <Parameter Name="ClientName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertProjectTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AssignedTo" Type="int" Mode="In" />
+          <Parameter Name="TaskStartDate" Type="date" Mode="In" />
+          <Parameter Name="TaskEndDate" Type="date" Mode="In" />
+          <Parameter Name="TaskCompletion" Type="int" Mode="In" />
+          <Parameter Name="UserStoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeName" Type="varchar" Mode="In" />
+          <Parameter Name="Designation" Type="varchar" Mode="In" />
+          <Parameter Name="ManagerID" Type="int" Mode="In" />
+          <Parameter Name="ContactNo" Type="varchar" Mode="In" />
+          <Parameter Name="EmailID" Type="varchar" Mode="In" />
+          <Parameter Name="SkillSets" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+          <Parameter Name="ProjectName" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+          <Parameter Name="ClientName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateProjectTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectTaskID" Type="int" Mode="In" />
+          <Parameter Name="AssignedTo" Type="int" Mode="In" />
+          <Parameter Name="TaskStartDate" Type="date" Mode="In" />
+          <Parameter Name="TaskEndDate" Type="date" Mode="In" />
+          <Parameter Name="TaskCompletion" Type="int" Mode="In" />
+          <Parameter Name="UserStoryID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ProjectManagementModelStoreContainer">
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManagerComment" EntityType="Self.ManagerComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjectTask" EntityType="Self.ProjectTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserStory" EntityType="Self.UserStory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ManagerCo__Proje__31EC6D26" Association="Self.FK__ManagerCo__Proje__31EC6D26">
+            <End Role="ProjectTask" EntitySet="ProjectTask" />
+            <End Role="ManagerComment" EntitySet="ManagerComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjectTa__Assig__2E1BDC42" Association="Self.FK__ProjectTa__Assig__2E1BDC42">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="ProjectTask" EntitySet="ProjectTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjectTa__UserS__2F10007B" Association="Self.FK__ProjectTa__UserS__2F10007B">
+            <End Role="UserStory" EntitySet="UserStory" />
+            <End Role="ProjectTask" EntitySet="ProjectTask" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserStory__Proje__29572725" Association="Self.FK__UserStory__Proje__29572725">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="UserStory" EntitySet="UserStory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProjectManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ManagerID" Type="Int32" />
+          <Property Name="ContactNo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EmailID" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="SkillSets" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ProjectTasks" Relationship="Self.FK__ProjectTa__Assig__2E1BDC42" FromRole="Employee" ToRole="ProjectTask" />
+        </EntityType>
+        <EntityType Name="ManagerComment">
+          <Key>
+            <PropertyRef Name="ManagerCommentID" />
+          </Key>
+          <Property Name="ManagerCommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectTaskID" Type="Int32" />
+          <NavigationProperty Name="ProjectTask" Relationship="Self.FK__ManagerCo__Proje__31EC6D26" FromRole="ManagerComment" ToRole="ProjectTask" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="ClientName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserStories" Relationship="Self.FK__UserStory__Proje__29572725" FromRole="Project" ToRole="UserStory" />
+        </EntityType>
+        <EntityType Name="ProjectTask">
+          <Key>
+            <PropertyRef Name="ProjectTaskID" />
+          </Key>
+          <Property Name="ProjectTaskID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <Property Name="TaskStartDate" Type="DateTime" Precision="0" />
+          <Property Name="TaskEndDate" Type="DateTime" Precision="0" />
+          <Property Name="TaskCompletion" Type="Int32" />
+          <Property Name="UserStoryID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__ProjectTa__Assig__2E1BDC42" FromRole="ProjectTask" ToRole="Employee" />
+          <NavigationProperty Name="ManagerComments" Relationship="Self.FK__ManagerCo__Proje__31EC6D26" FromRole="ProjectTask" ToRole="ManagerComment" />
+          <NavigationProperty Name="UserStory" Relationship="Self.FK__ProjectTa__UserS__2F10007B" FromRole="ProjectTask" ToRole="UserStory" />
+        </EntityType>
+        <EntityType Name="UserStory">
+          <Key>
+            <PropertyRef Name="UserStoryID" />
+          </Key>
+          <Property Name="UserStoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Story" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="Int32" />
+          <NavigationProperty Name="Project" Relationship="Self.FK__UserStory__Proje__29572725" FromRole="UserStory" ToRole="Project" />
+          <NavigationProperty Name="ProjectTasks" Relationship="Self.FK__ProjectTa__UserS__2F10007B" FromRole="UserStory" ToRole="ProjectTask" />
+        </EntityType>
+        <Association Name="FK__ProjectTa__Assig__2E1BDC42">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="ProjectTask">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ManagerCo__Proje__31EC6D26">
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="0..1" />
+          <End Role="ManagerComment" Type="Self.ManagerComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTask">
+              <PropertyRef Name="ProjectTaskID" />
+            </Principal>
+            <Dependent Role="ManagerComment">
+              <PropertyRef Name="ProjectTaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserStory__Proje__29572725">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="UserStory" Type="Self.UserStory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="UserStory">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProjectTa__UserS__2F10007B">
+          <End Role="UserStory" Type="Self.UserStory" Multiplicity="0..1" />
+          <End Role="ProjectTask" Type="Self.ProjectTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserStory">
+              <PropertyRef Name="UserStoryID" />
+            </Principal>
+            <Dependent Role="ProjectTask">
+              <PropertyRef Name="UserStoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="ManagerComments" EntityType="Self.ManagerComment" />
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <EntitySet Name="ProjectTasks" EntityType="Self.ProjectTask" />
+          <EntitySet Name="UserStories" EntityType="Self.UserStory" />
+          <AssociationSet Name="FK__ProjectTa__Assig__2E1BDC42" Association="Self.FK__ProjectTa__Assig__2E1BDC42">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ProjectTask" EntitySet="ProjectTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ManagerCo__Proje__31EC6D26" Association="Self.FK__ManagerCo__Proje__31EC6D26">
+            <End Role="ProjectTask" EntitySet="ProjectTasks" />
+            <End Role="ManagerComment" EntitySet="ManagerComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserStory__Proje__29572725" Association="Self.FK__UserStory__Proje__29572725">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="UserStory" EntitySet="UserStories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProjectTa__UserS__2F10007B" Association="Self.FK__ProjectTa__UserS__2F10007B">
+            <End Role="UserStory" EntitySet="UserStories" />
+            <End Role="ProjectTask" EntitySet="ProjectTasks" />
+          </AssociationSet>
+          <FunctionImport Name="DeleteProject">
+          <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllProjects" ReturnType="Collection(ProjectManagementModel.GetAllProjects_Result)" />
+          <FunctionImport Name="GetProjectByID" ReturnType="Collection(ProjectManagementModel.GetProjectByID_Result)">
+          <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProjectByName" ReturnType="Collection(ProjectManagementModel.GetProjectByName_Result)">
+          <Parameter Name="ProjectName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertProject">
+            <Parameter Name="ProjectName" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ClientName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateProject">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+            <Parameter Name="ProjectName" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ClientName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteEmployee">
+          <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProjectTask">
+          <Parameter Name="ProjectTaskID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllEmployees" ReturnType="Collection(ProjectManagementModel.GetAllEmployees_Result)" />
+          <FunctionImport Name="GetAllProjectTasks" ReturnType="Collection(ProjectManagementModel.GetAllProjectTasks_Result)" />
+          <FunctionImport Name="GetEmployeeByName" ReturnType="Collection(ProjectManagementModel.GetEmployeeByName_Result)">
+          <Parameter Name="EmployeeName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProjectTaskByID" ReturnType="Collection(ProjectManagementModel.GetProjectTaskByID_Result)">
+          <Parameter Name="ProjectTaskID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetUserStories" ReturnType="Collection(ProjectManagementModel.GetUserStories_Result)" />
+          <FunctionImport Name="InsertEmployee">
+            <Parameter Name="EmployeeName" Mode="In" Type="String" />
+            <Parameter Name="Designation" Mode="In" Type="String" />
+            <Parameter Name="ManagerID" Mode="In" Type="Int32" />
+            <Parameter Name="ContactNo" Mode="In" Type="String" />
+            <Parameter Name="EmailID" Mode="In" Type="String" />
+            <Parameter Name="SkillSets" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertProjectTask">
+            <Parameter Name="AssignedTo" Mode="In" Type="Int32" />
+            <Parameter Name="TaskStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="TaskEndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="TaskCompletion" Mode="In" Type="Int32" />
+            <Parameter Name="UserStoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateEmployee">
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeName" Mode="In" Type="String" />
+            <Parameter Name="Designation" Mode="In" Type="String" />
+            <Parameter Name="ManagerID" Mode="In" Type="Int32" />
+            <Parameter Name="ContactNo" Mode="In" Type="String" />
+            <Parameter Name="EmailID" Mode="In" Type="String" />
+            <Parameter Name="SkillSets" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateProjectTask">
+            <Parameter Name="ProjectTaskID" Mode="In" Type="Int32" />
+            <Parameter Name="AssignedTo" Mode="In" Type="Int32" />
+            <Parameter Name="TaskStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="TaskEndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="TaskCompletion" Mode="In" Type="Int32" />
+            <Parameter Name="UserStoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetEmployeeByID" ReturnType="Collection(ProjectManagementModel.GetEmployeeByID_Result)">
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetAllProjects_Result">
+          <Property Type="Int32" Name="ProjectID" Nullable="false" />
+          <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" />
+          <Property Type="String" Name="ClientName" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetProjectByID_Result">
+          <Property Type="Int32" Name="ProjectID" Nullable="false" />
+          <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" />
+          <Property Type="String" Name="ClientName" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetProjectByName_Result">
+          <Property Type="Int32" Name="ProjectID" Nullable="false" />
+          <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" />
+          <Property Type="String" Name="ClientName" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetAllEmployees_Result">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="ManagerID" Nullable="true" />
+          <Property Type="String" Name="ContactNo" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailID" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SkillSets" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetAllProjectTasks_Result">
+          <Property Type="Int32" Name="ProjectTaskID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="500" />
+          <Property Type="DateTime" Name="TaskStartDate" Nullable="true" />
+          <Property Type="DateTime" Name="TaskEndDate" Nullable="true" />
+          <Property Type="Int32" Name="TaskCompletion" Nullable="true" />
+          <Property Type="String" Name="Story" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetEmployeeByName_Result">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="ManagerID" Nullable="true" />
+          <Property Type="String" Name="ContactNo" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailID" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SkillSets" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetProjectTaskByID_Result">
+          <Property Type="Int32" Name="ProjectTaskID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="500" />
+          <Property Type="DateTime" Name="TaskStartDate" Nullable="true" />
+          <Property Type="DateTime" Name="TaskEndDate" Nullable="true" />
+          <Property Type="Int32" Name="TaskCompletion" Nullable="true" />
+          <Property Type="String" Name="Story" Nullable="true" MaxLength="500" />
+        </ComplexType>
+        <ComplexType Name="GetUserStories_Result">
+          <Property Type="Int32" Name="UserStoryID" Nullable="false" />
+          <Property Type="String" Name="Story" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ProjectName" Nullable="true" MaxLength="1000" />
+        </ComplexType>
+        <ComplexType Name="GetEmployeeByID_Result">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="ManagerID" Nullable="true" />
+          <Property Type="String" Name="ContactNo" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="EmailID" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="SkillSets" Nullable="true" MaxLength="500" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProjectManagementModelStoreContainer" CdmEntityContainer="ProjectManagementEntities">
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="ProjectManagementModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="SkillSets" ColumnName="SkillSets" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ManagerComments">
+            <EntityTypeMapping TypeName="ProjectManagementModel.ManagerComment">
+              <MappingFragment StoreEntitySet="ManagerComment">
+                <ScalarProperty Name="ManagerCommentID" ColumnName="ManagerCommentID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="ProjectTaskID" ColumnName="ProjectTaskID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="ProjectManagementModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjectTasks">
+            <EntityTypeMapping TypeName="ProjectManagementModel.ProjectTask">
+              <MappingFragment StoreEntitySet="ProjectTask">
+                <ScalarProperty Name="ProjectTaskID" ColumnName="ProjectTaskID" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="TaskStartDate" ColumnName="TaskStartDate" />
+                <ScalarProperty Name="TaskEndDate" ColumnName="TaskEndDate" />
+                <ScalarProperty Name="TaskCompletion" ColumnName="TaskCompletion" />
+                <ScalarProperty Name="UserStoryID" ColumnName="UserStoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserStories">
+            <EntityTypeMapping TypeName="ProjectManagementModel.UserStory">
+              <MappingFragment StoreEntitySet="UserStory">
+                <ScalarProperty Name="UserStoryID" ColumnName="UserStoryID" />
+                <ScalarProperty Name="Story" ColumnName="Story" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteProject" FunctionName="ProjectManagementModel.Store.DeleteProject" />
+          <FunctionImportMapping FunctionImportName="GetAllProjects" FunctionName="ProjectManagementModel.Store.GetAllProjects">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetAllProjects_Result">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProjectByID" FunctionName="ProjectManagementModel.Store.GetProjectByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetProjectByID_Result">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProjectByName" FunctionName="ProjectManagementModel.Store.GetProjectByName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetProjectByName_Result">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertProject" FunctionName="ProjectManagementModel.Store.InsertProject" />
+          <FunctionImportMapping FunctionImportName="UpdateProject" FunctionName="ProjectManagementModel.Store.UpdateProject" />
+          <FunctionImportMapping FunctionImportName="DeleteEmployee" FunctionName="ProjectManagementModel.Store.DeleteEmployee" />
+          <FunctionImportMapping FunctionImportName="DeleteProjectTask" FunctionName="ProjectManagementModel.Store.DeleteProjectTask" />
+          <FunctionImportMapping FunctionImportName="GetAllEmployees" FunctionName="ProjectManagementModel.Store.GetAllEmployees">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetAllEmployees_Result">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="SkillSets" ColumnName="SkillSets" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllProjectTasks" FunctionName="ProjectManagementModel.Store.GetAllProjectTasks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetAllProjectTasks_Result">
+                <ScalarProperty Name="ProjectTaskID" ColumnName="ProjectTaskID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="TaskStartDate" ColumnName="TaskStartDate" />
+                <ScalarProperty Name="TaskEndDate" ColumnName="TaskEndDate" />
+                <ScalarProperty Name="TaskCompletion" ColumnName="TaskCompletion" />
+                <ScalarProperty Name="Story" ColumnName="Story" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetEmployeeByName" FunctionName="ProjectManagementModel.Store.GetEmployeeByName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetEmployeeByName_Result">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="SkillSets" ColumnName="SkillSets" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProjectTaskByID" FunctionName="ProjectManagementModel.Store.GetProjectTaskByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetProjectTaskByID_Result">
+                <ScalarProperty Name="ProjectTaskID" ColumnName="ProjectTaskID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="TaskStartDate" ColumnName="TaskStartDate" />
+                <ScalarProperty Name="TaskEndDate" ColumnName="TaskEndDate" />
+                <ScalarProperty Name="TaskCompletion" ColumnName="TaskCompletion" />
+                <ScalarProperty Name="Story" ColumnName="Story" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetUserStories" FunctionName="ProjectManagementModel.Store.GetUserStories">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetUserStories_Result">
+                <ScalarProperty Name="UserStoryID" ColumnName="UserStoryID" />
+                <ScalarProperty Name="Story" ColumnName="Story" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertEmployee" FunctionName="ProjectManagementModel.Store.InsertEmployee" />
+          <FunctionImportMapping FunctionImportName="InsertProjectTask" FunctionName="ProjectManagementModel.Store.InsertProjectTask" />
+          <FunctionImportMapping FunctionImportName="UpdateEmployee" FunctionName="ProjectManagementModel.Store.UpdateEmployee" />
+          <FunctionImportMapping FunctionImportName="UpdateProjectTask" FunctionName="ProjectManagementModel.Store.UpdateProjectTask" />
+          <FunctionImportMapping FunctionImportName="GetEmployeeByID" FunctionName="ProjectManagementModel.Store.GetEmployeeByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ProjectManagementModel.GetEmployeeByID_Result">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="SkillSets" ColumnName="SkillSets" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

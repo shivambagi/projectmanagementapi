@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="ProjectManagementEntities-Web.config Connection String" description="ProjectManagementEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/ProjectTrackingDB.csdl|res://*/ProjectTrackingDB.ssdl|res://*/ProjectTrackingDB.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=LAPTOP-2N52V7TL;initial catalog=ProjectManagement;integrated security=false;user ID=shivam;password=shivam;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\SHIVAM\\source\\repos\\ProjectManagementAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='ProjectManagementEntities']/@connectionString" />
+  </parameter>
+</parameters>
